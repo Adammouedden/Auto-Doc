@@ -27,13 +27,10 @@ export function activate(context: vscode.ExtensionContext) {
 
 		// Find the user's python path (important for Linux/Kubuntu)
         const pythonPath = "python"; 
-        const scriptPath = context.asAbsolutePath('doc-generation\generator.py');
+		let rawScriptPath: string = String.raw`doc-generation\dfs_file_traverser.py`
+        const scriptPath = context.asAbsolutePath(rawScriptPath);
 
-<<<<<<< HEAD
-        const process = cp.spawn(pythonPath, [scriptPath]);
-=======
         const process = cp.spawn(pythonPath, [scriptPath, '--filepath', fileUri.fsPath], { cwd: folderUri.fsPath });
->>>>>>> 1e938fc99646f9bbfc945729147c8dd5361d6585
 
         process.stdout.on('data', (data) => {
             vscode.window.showInformationMessage(`Python says: ${data}`);
