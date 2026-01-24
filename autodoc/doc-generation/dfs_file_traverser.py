@@ -1,14 +1,6 @@
 from pathlib import Path
 import text_generator
-import logging
 import argparse
-
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-    filename="app.log",
-    filemode="a"
-)
 
 
 ignore_list = {".git", ".gitignore", ".vscode", "node_modules"}
@@ -43,8 +35,6 @@ def generate_doc(directory: Path):
 
     md_path= directory/f"{directory.name}README.md"
     with md_path.open('w') as file:
-
-        logging.info(f"WRITING TO THIS FILE: {item.name}")
         file.write(md_doc_text)
         
         
@@ -75,7 +65,6 @@ def generate_doc_from_child(directory: Path):
 
     md_path= directory/f"{directory.name}README.md"
     with md_path.open('w') as file:
-        logging.info(f"WRITING TO THIS FILE: {item.name}")
         file.write(md_doc_text)
 
             
