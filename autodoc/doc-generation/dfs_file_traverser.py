@@ -35,7 +35,10 @@ def generate_doc(directory: Path):
         if is_generated_readme(item):
             continue
         text.append(f"file name: {item.name} in directory: {directory.name}")
-        text.append(get_item_text(item))
+
+        content = get_item_text(item)
+        if content:
+            text.append(content)
     
     prompt_input = "\n".join(text)
     md_doc_text= text_generator.llm_response(0, prompt_input)
@@ -99,33 +102,22 @@ def get_dir_doc(directory: Path):
 
 
 def get_item_text(item:Path)->str:  
-
-    if item.name not in ignore_list:
-        #print(f"\t {item.parent}: {item.name}") # read the file 
-
-        if item.is_file():
-            print("INGESTING:", item)
-
-            #DEBUG MODE COMMENT
-            if DEBUG_MODE:
-                print(f"Reading from: {item}")
-
-            if is_text_file(item):
-                try:
-                    with item.open( "r", encoding="utf-8") as f:
-                        text = f.read()
-
-                    if text is None: 
-                        return ""
-                    
-                    return text 
-
-                except UnicodeDecodeError:
-                    return ""
-
-              
+    if item.name in ignore_list:
+        return ""
+    
+    if not item.is_file():
+        return ""
+    
+    if not is_text_file(item):
+        return ""
+    
+    try:
+        with item.open("r", encoding="utf-8") as f:
+            return f.read() or ""
+        
+    except UnicodeDecodeError:
+        return ""
             
-
 
 def depth_traversal(current_directory: Path):
     if current_directory.name in ignore_list:
