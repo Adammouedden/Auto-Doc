@@ -18,11 +18,19 @@ export function activate(context: vscode.ExtensionContext) {
 	const disposable = vscode.commands.registerCommand('autodoc.helloWorld', () => {
 		// The code you place here will be executed every time your command is executed
 		// Display a message box to the user
+		console.log("damn");
 		vscode.window.showInformationMessage('Hello World from autoDoc!');
+		vscode.window.showInformationMessage('Eat my buttcheeks');
+		//const currentFolder = vscode.workspace.workspaceFolders;
+		const folderUri = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0].uri : undefined;
+		console.log('Current Workspace Folder:', folderUri);
+		//vscode.window.showInformationMessage(currentFolder);
 	});
 
 	context.subscriptions.push(disposable);
 }
+
+
 
 // This method is called when your extension is deactivated
 export function deactivate() {}
