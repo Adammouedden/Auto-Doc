@@ -9,7 +9,7 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": ["onCommand:autodoc.helloWorld"],
+  "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
@@ -20,7 +20,7 @@
     ],
     "keybindings": [
       {
-        "key": "alt+shift+;",
+        "key": "ctrl+shift+a",
         "command": "autodoc.helloWorld",
         "when": "editorTextFocus"
       }
