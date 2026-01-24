@@ -47,7 +47,7 @@ def generate_doc(directory: Path):
     prompt_input = "\n".join(text)
     md_doc_text= text_generator.llm_response(0, prompt_input)
 
-    md_path= directory/f"{directory.name}README.md"
+    md_path= directory/"README.md"
 
     #DEBUG MODE COMMENT
     if DEBUG_MODE:
@@ -82,7 +82,7 @@ def generate_doc_from_child(directory: Path):
     prompt_input = "\n".join(text)
     md_doc_text = text_generator.llm_response(0, prompt_input)
 
-    md_path= directory/f"{directory.name}README.md"
+    md_path= directory/"README.md"
 
     #DEBUG MODE COMMENT
     if DEBUG_MODE:
@@ -93,7 +93,7 @@ def generate_doc_from_child(directory: Path):
 
             
 def get_dir_doc(directory: Path):
-    md_path = directory/f"{directory.name}README.md"
+    md_path= directory/"README.md"
     
     #DEBUG MODE COMMENT
     if DEBUG_MODE:
