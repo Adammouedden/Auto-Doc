@@ -27,9 +27,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 		// Find the user's python path (important for Linux/Kubuntu)
         const pythonPath = "python"; 
-        const scriptPath = context.asAbsolutePath('extension.py');
+        const scriptPath = context.asAbsolutePath('doc-generation\generator.py');
 
-        const process = cp.spawn(pythonPath, [scriptPath, "arg1"]);
+        const process = cp.spawn(pythonPath, [scriptPath]);
 
         process.stdout.on('data', (data) => {
             vscode.window.showInformationMessage(`Python says: ${data}`);

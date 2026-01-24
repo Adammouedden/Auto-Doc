@@ -1,6 +1,19 @@
 from pathlib import Path
+import argparse
+import logging
 
-current_directory= Path('test_directory')
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    filename="app.log",
+    filemode="a"
+)
+
+left, right = (0, 0)
+
+logging.info("")
+
+
 ignore_list = {".git", ".gitignore", ".vscode"}
 
 def is_leaf_directory(directory: Path)->bool:
@@ -75,5 +88,12 @@ def depth_traversal(current_directory: Path):
 
     generate_doc_from_child(current_directory)
 
-depth_traversal(current_directory)             
-        
+def main():
+    parser = argparse.ArgumentParser(description="AutoDoc relative file path for current working directory")
+    parser.add_argument("--filepath", type=str, default="")
+    parseargs = parser.parse_args()
+
+    current_directory= Path(parseargs.filepath)
+    depth_traversal(current_directory)             
+
+main()

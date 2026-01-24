@@ -55,8 +55,8 @@ function activate(context) {
         console.log('Current file directory:', folderUri.fsPath);
         // Find the user's python path (important for Linux/Kubuntu)
         const pythonPath = "python";
-        const scriptPath = context.asAbsolutePath('extension.py');
-        const process = cp.spawn(pythonPath, [scriptPath, "arg1"]);
+        const scriptPath = context.asAbsolutePath('doc-generation\generator.py');
+        const process = cp.spawn(pythonPath, [scriptPath]);
         process.stdout.on('data', (data) => {
             vscode.window.showInformationMessage(`Python says: ${data}`);
         });
