@@ -13,13 +13,17 @@ prompts = [
         "Do not include code snippets unless necessary for clarity."
     ),
     (
-        "You are given a directory containing files and nested subdirectory summaries, "
-        "where each subdirectory summary is already provided in Markdown format. "
-        "Generate a Markdown-formatted document that:\n"
-        "- Describes the overall directory structure\n"
-        "- Integrates and references the existing subdirectory summaries\n"
-        "- Briefly explains the role of each file in the current directory\n"
-        "Do not rewrite the subdirectory summaries; synthesize them at a higher level."
+        "You are given input representing the contents of a directory.\n\n"
+        "The input contains two kinds of content:\n"
+        "1. Raw source code files from the current directory.\n"
+        "2. Markdown README summaries generated for child directories.\n\n"
+        "Instructions:\n"
+        "- For raw source code files, briefly describe the purpose of each file and its functions.\n"
+        "- For README or Markdown content, do NOT describe individual files or functions inside it.\n"
+        "  Instead, produce a short high-level summary of what that README describes. Do this for every READme of the child directories\n"
+        "- Use child README summaries only as contextual information.\n"
+        "- Do not repeat or expand the child README content verbatim.\n"
+        "- Produce a concise Markdown summary of the current directory.\n"
     )
 ]
 
