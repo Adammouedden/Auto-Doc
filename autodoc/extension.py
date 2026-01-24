@@ -10,7 +10,7 @@ def main():
     print("AutoDoc Extension Tester is running...")
     print(parseargs.filepath) if parseargs.filepath else print("No filepath provided.")
 
-    with open("loggingtime.txt", "a") as f:
+    with open(r"C:\Users\Kenta\Desktop\Auto-Doc\autodoc\loggingtime.txt", "a") as f:
         f.write(f"Ran extension.py at {datetime.now()} with {parseargs.filepath}\n")
 
 if __name__ == "__main__":
