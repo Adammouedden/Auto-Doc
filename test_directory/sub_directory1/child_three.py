@@ -1,3 +1,5 @@
+import pygame
+
 def max_value(numbers):
     if not numbers:
         return None

@@ -146,9 +146,9 @@ def main():
     parser.add_argument("--filepath", type=str, default="")
     parseargs = parser.parse_args()
 
-    current_directory= Path(parseargs.filepath)
-    #current_directory = Path(r"c:\Users\adamm\Documents\PROJECTS\CodingAgent")
-    depth_traversal(current_directory)             
+    #current_directory= Path(parseargs.filepath)
+    current_directory = Path(r"C:\Users\hello\Auto-Doc\test_directory")
+    depth_traversal(current_directory)              
 
 main()          
         
