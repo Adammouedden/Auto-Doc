@@ -1,5 +1,10 @@
 .venv
-.env
 node_modules/
 test_directory/
 pyvenv.cfg
+*.env
+node_modules/
+__pycache__/
+*.pyc
+README.md
+

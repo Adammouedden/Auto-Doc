@@ -55,13 +55,10 @@ function activate(context) {
         console.log("Current file directory:", folderUri.fsPath);
         // Find the user's python path (important for Linux/Kubuntu)
         const pythonPath = "python";
-<<<<<<< HEAD
-        const scriptPath = context.asAbsolutePath('doc-generation\generator.py');
-        const process = cp.spawn(pythonPath, [scriptPath]);
-=======
-        const scriptPath = context.asAbsolutePath('extension.py');
-        const process = cp.spawn(pythonPath, [scriptPath, '--filepath', fileUri.fsPath], { cwd: folderUri.fsPath });
->>>>>>> 1e938fc99646f9bbfc945729147c8dd5361d6585
+        let rawScriptPath = String.raw `doc-generation\dfs_file_traverser.py`;
+        const scriptPath = context.asAbsolutePath(rawScriptPath);
+        console.log(scriptPath);
+        const process = cp.spawn(pythonPath, [scriptPath, '--filepath', folderUri.fsPath], { cwd: folderUri.fsPath });
         process.stdout.on('data', (data) => {
             vscode.window.showInformationMessage(`Python says: ${data}`);
         });
