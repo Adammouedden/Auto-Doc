@@ -1,6 +1,6 @@
-# auto-doc README
+# autodoc README
 
-This is the README for your extension "auto-doc". After writing up a brief description, we recommend including the following sections.
+This is the README for your extension "autodoc". After writing up a brief description, we recommend including the following sections.
 
 ## Features
 

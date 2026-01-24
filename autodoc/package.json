@@ -1,7 +1,7 @@
 {
-  "name": "auto-doc",
-  "displayName": "Auto-Doc",
-  "description": "A repository summarizer that provides READMEs, documentation, and figures for a given repository.",
+  "name": "autodoc",
+  "displayName": "autoDoc",
+  "description": "Summarizes, documents, and generates figures to help the developer understand the repository folder by folder.",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.108.1"
@@ -14,7 +14,7 @@
   "contributes": {
     "commands": [
       {
-        "command": "auto-doc.helloWorld",
+        "command": "autodoc.helloWorld",
         "title": "Hello World"
       }
     ]
