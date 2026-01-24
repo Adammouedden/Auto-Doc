@@ -1,3 +1,5 @@
+import numpy
+
 def double_numbers(numbers):
     result = []
     for n in numbers:

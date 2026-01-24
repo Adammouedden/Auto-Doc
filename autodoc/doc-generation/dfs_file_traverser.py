@@ -3,12 +3,11 @@ import text_generator
 import logging
 import argparse
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-    filename="app.log",
-    filemode="a"
-)
+import sys
+sys.stdout.reconfigure(write_through=True)
+
+
+DEBUG_MODE = True
 
 
 ignore_list = {".git", ".gitignore", ".vscode", "node_modules"}
