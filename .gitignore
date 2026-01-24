@@ -1,3 +1,5 @@
+.venv
 .env
 node_modules/
 test_directory/
+pyvenv.cfg
