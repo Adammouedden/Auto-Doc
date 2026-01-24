@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as cp from 'child_process';
+import { HelloWorldPanel } from './HelloWorldPanel';
 
 console.log('AutoDoc extension is loading...');
 
@@ -7,6 +8,8 @@ export function activate(context: vscode.ExtensionContext) {
 	console.log('Congratulations, your extension "autodoc" is now active!');
 
 	const disposable = vscode.commands.registerCommand('autodoc.helloWorld', () => {
+		HelloWorldPanel.createOrShow(context.extensionUri, context);
+
 		vscode.window.showInformationMessage('Hello World from autoDoc!');
 		
 		//Access the activeTextEditor to find out what file we are currently in
@@ -51,3 +54,5 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(disposable);
 }
+
+export function deactivate() {}
