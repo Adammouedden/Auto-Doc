@@ -12,31 +12,45 @@ def is_leaf_directory(directory: Path)->bool:
 def generate_doc(directory: Path):
 
     print(f"doc for {directory}")
+    
+    md_path= directory/f"{directory.name}README.md"
 
-    for item in directory.iterdir():
-        text = get_item_text(item)
-        print(text)
-        print("\n")
-        # TODO: write leaf doc
+    with md_path.open('w') as file:
+        for item in directory.iterdir():
+            text = get_item_text(item)
+            file.write(text)
+            file.write("\n")
+            # TODO: write leaf doc
     
 
 def generate_doc_from_child(directory: Path):
     # TODO: aggregate child docs into this directory's doc
     print(f"Aggregating for: {directory}")
 
-    for item in directory.iterdir():
-        if(item.is_dir()) and item.name not in ignore_list:
-            get_dir_doc(item)
-        else:
-            text= get_item_text(item)
-            print(text)
-            print("\n")
+    md_path= directory/f"{directory.name}README.md"
+
+    with md_path.open('w') as file:
+        for item in directory.iterdir():
+            if(item.is_dir()) and item.name not in ignore_list:
+                child_doc= get_dir_doc(item)
+                file.write(f"THIS COMES FROM A CHILD DIRECTORY:{item.name}")
+                file.write(child_doc)
+
+            else:
+                text = get_item_text(item)
+                file.write(text)
+                file.write("\n")
             
+def get_dir_doc(directory: Path):
+    md_path = directory/f"{directory.name}README.md"
+    with md_path.open("r", encoding="utf-8") as f:
+        text = f.read()
+    return text
 
 def get_item_text(item:Path)->str:  
     #TODO: Read from files in the directory that are not other directories and not in the ignore list
         if item.name not in ignore_list:
-            print(f"\t {item.parent}: {item.name}") # read the file 
+            #print(f"\t {item.parent}: {item.name}") # read the file 
 
             if item.is_file():
                 with item.open( "r", encoding="utf-8") as f:
@@ -44,9 +58,7 @@ def get_item_text(item:Path)->str:
                 return text    
 
 
-def get_dir_doc(directory: Path):
-    #TODO: get directory documentation and return it
-    return
+
 
 def depth_traversal(current_directory: Path):
 
