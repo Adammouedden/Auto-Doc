@@ -12,11 +12,20 @@ class isModel(BaseModel):
 
 client = genai.Client(api_key=GEMINI_API_KEY)
 
-prompt = input("Paste code here \n>") # TODO: Link input to VS code extension, copy code when shortcut
+print("PASTE YOUR CODE HERE\n>")
+
+lines = []
+# prompt = input("Paste code here \n>") # TODO: Link input to VS code extension, copy code when shortcut
+while True:
+    line = input()
+    if  line == "EOF":
+        break
+    lines.append(line)
+
 
 response = client.models.generate_content(
-    model="Gemini 3 Pro Preview",
-    contents=prompt,
+    model="gemini-3-pro-preview",
+    contents=lines,
     config={
         "response_mime_type": "application/json",
         "response_json_schema": isModel.model_json_schema(),
