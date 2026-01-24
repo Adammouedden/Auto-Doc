@@ -21,10 +21,22 @@ export function activate(context: vscode.ExtensionContext) {
 		console.log("damn");
 		vscode.window.showInformationMessage('Hello World from autoDoc!');
 		vscode.window.showInformationMessage('Eat my buttcheeks');
-		//const currentFolder = vscode.workspace.workspaceFolders;
-		const folderUri = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0].uri : undefined;
-		console.log('Current Workspace Folder:', folderUri);
-		//vscode.window.showInformationMessage(currentFolder);
+		
+		//Access the activeTextEditor to find out what file we are currently in
+		const editor = vscode.window.activeTextEditor;
+		
+		//Exception handling for if the editor is not open
+		if (!editor) {
+			vscode.window.showErrorMessage('No active file'); 	
+			return;
+		}
+
+		//Get the fileURI for the document we have currently opened, along with the folder URI by using the reference to the parent directory '..'
+		const fileUri = editor.document.uri;
+		const folderUri = vscode.Uri.joinPath(fileUri, '..');
+
+		//console.log('Current file:', fileUri.fsPath);
+		console.log('Current file directory:', folderUri.fsPath);
 	});
 
 	context.subscriptions.push(disposable);

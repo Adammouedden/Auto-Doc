@@ -55,7 +55,16 @@ function activate(context) {
         vscode.window.showInformationMessage('Hello World from autoDoc!');
         vscode.window.showInformationMessage('Eat my buttcheeks');
         //const currentFolder = vscode.workspace.workspaceFolders;
-        const folderUri = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0].uri : undefined;
+        //const folderUri = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0].uri : undefined;
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            vscode.window.showErrorMessage('No active file');
+            return;
+        }
+        const fileUri = editor.document.uri;
+        const folderUri = vscode.Uri.joinPath(fileUri, '..');
+        console.log('Current file:', fileUri.fsPath);
+        console.log('Current file directory:', folderUri.fsPath);
         console.log('Current Workspace Folder:', folderUri);
         //vscode.window.showInformationMessage(currentFolder);
     });
