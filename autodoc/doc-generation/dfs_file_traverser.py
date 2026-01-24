@@ -2,6 +2,10 @@ from pathlib import Path
 import text_generator
 import argparse
 
+import sys
+sys.stdout.reconfigure(write_through=True)
+
+
 DEBUG_MODE = True
 
 

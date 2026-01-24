@@ -1,0 +1,8 @@
+{
+  "files": [
+    {
+      "filename": "description",
+      "libraries": ["library names", "library links"]
+    }
+  ]
+}
