@@ -1,6 +1,5 @@
 .env
 *.env
 node_modules/
-test_directory/
 __pychache__/
 *.pyc
