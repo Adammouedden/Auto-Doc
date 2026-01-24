@@ -1,6 +1,5 @@
 from pathlib import Path
 import text_generator
-import logging
 import argparse
 
 import sys
@@ -10,7 +9,13 @@ sys.stdout.reconfigure(write_through=True)
 DEBUG_MODE = True
 
 
-ignore_list = {".git", ".gitignore", ".vscode", "node_modules"}
+ignore_list = {".git", ".gitignore", ".vscode", "node_modules", "__pycache__", "<frozen codecs>"}
+TEXT_EXTENSIONS = {".py", ".js", ".ts", ".md", ".txt", ".java", ".cpp", ".json", ".txt", ".c"}
+
+
+def is_text_file(path: Path):
+    return path.suffix.lower() in TEXT_EXTENSIONS
+
 
 def is_leaf_directory(directory: Path)->bool:
     for item in directory.iterdir():
@@ -23,11 +28,10 @@ def is_generated_readme(item: Path) -> bool:
 
 
 def generate_doc(directory: Path):
-
     #print(f"doc for {directory}")
     
 
-    text=[]
+    text=[""]
 
     for item in directory.iterdir():
         if item.name in ignore_list:
@@ -35,15 +39,21 @@ def generate_doc(directory: Path):
         if is_generated_readme(item):
             continue
         text.append(f"file name: {item.name} in directory: {directory.name}")
-        text.append(get_item_text(item))
+
+        content = get_item_text(item)
+        if content:
+            text.append(content)
     
     prompt_input = "\n".join(text)
     md_doc_text= text_generator.llm_response(0, prompt_input)
 
     md_path= directory/f"{directory.name}README.md"
-    with md_path.open('w') as file:
 
-        logging.info(f"WRITING TO THIS FILE: {item.name}")
+    #DEBUG MODE COMMENT
+    if DEBUG_MODE:
+        print(f"Writing to: {md_path}")
+    
+    with md_path.open('w') as file:
         file.write(md_doc_text)
         
         
@@ -53,7 +63,7 @@ def generate_doc_from_child(directory: Path):
     # TODO: aggregate child docs into this directory's doc
     #print(f"Aggregating for: {directory}")
 
-    text =[]
+    text = []
 
     for item in directory.iterdir():
         if item.name in ignore_list:
@@ -73,35 +83,51 @@ def generate_doc_from_child(directory: Path):
     md_doc_text = text_generator.llm_response(0, prompt_input)
 
     md_path= directory/f"{directory.name}README.md"
+
+    #DEBUG MODE COMMENT
+    if DEBUG_MODE:
+        print(f"Writing to: {md_path}")
+
     with md_path.open('w') as file:
-        logging.info(f"WRITING TO THIS FILE: {item.name}")
         file.write(md_doc_text)
 
             
 def get_dir_doc(directory: Path):
     md_path = directory/f"{directory.name}README.md"
+    
+    #DEBUG MODE COMMENT
+    if DEBUG_MODE:
+        print(f"Reading from: {md_path}")
+    
     with md_path.open("r", encoding="utf-8") as f:
         text = f.read()
+
     return text
 
+
 def get_item_text(item:Path)->str:  
-
-    if item.name not in ignore_list:
-        #print(f"\t {item.parent}: {item.name}") # read the file 
-
-        if item.is_file():
-            print("INGESTING:", item)
-
-            with item.open( "r", encoding="utf-8") as f:
-                text= f.read()
-            if text is None: return ""
-            return text    
+    if item.name in ignore_list:
+        return ""
+    
+    if not item.is_file():
+        return ""
+    
+    if not is_text_file(item):
+        return ""
+    
+    try:
+        with item.open("r", encoding="utf-8") as f:
+            return f.read() or ""
+        
+    except UnicodeDecodeError:
+        return ""
             
 
-
 def depth_traversal(current_directory: Path):
-
     if current_directory.name in ignore_list:
+        return
+
+    if not current_directory.is_dir():
         return
     
     if is_leaf_directory(current_directory):
@@ -114,13 +140,15 @@ def depth_traversal(current_directory: Path):
 
     generate_doc_from_child(current_directory)
 
+
 def main():
     parser = argparse.ArgumentParser(description="AutoDoc relative file path for current working directory")
     parser.add_argument("--filepath", type=str, default="")
     parseargs = parser.parse_args()
 
     current_directory= Path(parseargs.filepath)
-    depth_traversal(current_directory)             
+    #current_directory = Path(r"c:\Users\adamm\Documents\PROJECTS\CodingAgent")
+    depth_traversal(current_directory)              
 
 main()          
         
