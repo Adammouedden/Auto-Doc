@@ -15,7 +15,7 @@
     "commands": [
       {
         "command": "autodoc.helloWorld",
-        "title": "Hello World"
+        "title": "Auto Doc"
       }
     ]
   },
