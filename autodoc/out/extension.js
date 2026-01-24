@@ -57,7 +57,8 @@ function activate(context) {
         const pythonPath = "python";
         let rawScriptPath = String.raw `doc-generation\dfs_file_traverser.py`;
         const scriptPath = context.asAbsolutePath(rawScriptPath);
-        const process = cp.spawn(pythonPath, [scriptPath, '--filepath', fileUri.fsPath], { cwd: folderUri.fsPath });
+        console.log(scriptPath);
+        const process = cp.spawn(pythonPath, [scriptPath, '--filepath', folderUri.fsPath], { cwd: folderUri.fsPath });
         process.stdout.on('data', (data) => {
             vscode.window.showInformationMessage(`Python says: ${data}`);
         });

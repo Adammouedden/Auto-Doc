@@ -27,13 +27,13 @@ prompts = [
     )
 ]
 
-load_dotenv()
-api_key= os.getenv('GOOGLE_API_KEY')
+load_dotenv(override=True)
+api_key = os.getenv('GOOGLE_API_KEY')
 
 client = genai.Client(api_key=api_key)
 
 def llm_response(prompt_type: int, input_string:str)->str:
-    '''
+    
     response = client.models.generate_content(
         model = "gemini-2.5-flash",
         contents= input_string,
@@ -44,6 +44,4 @@ def llm_response(prompt_type: int, input_string:str)->str:
     )
 
     return response.text
-    '''
-
-    return "LLM WOULD BE CALLED HERE"
+    
