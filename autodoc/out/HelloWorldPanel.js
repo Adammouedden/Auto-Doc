@@ -92,6 +92,7 @@ class HelloWorldPanel {
         this._extensionUri = extensionUri;
         this._apikey = apikey;
         this.context = context;
+        vscode.window.showInformationMessage('Processing your request for a machine learning diagram...');
         // Set the webview's initial html content
         this._update();
         // Listen for when the panel is disposed
@@ -148,7 +149,8 @@ class HelloWorldPanel {
         process.stderr.on("data", (d) => { stderr += d.toString(); });
         process.on("close", (code) => {
             if (code !== 0) {
-                vscode.window.showErrorMessage(`Python exited with code ${code}: ${stderr}`);
+                console.log(`Python exited with code ${code}: ${stderr}`);
+                //vscode.window.showErrorMessage(`Python exited with code ${code}: ${stderr}`);
                 return;
             }
             let payload;
@@ -156,11 +158,13 @@ class HelloWorldPanel {
                 payload = JSON.parse(stdout);
             }
             catch (e) {
-                vscode.window.showErrorMessage(`Failed to parse Python JSON. stderr: ${stderr}`);
+                console.error("Failed to parse Python JSON:", e);
+                //vscode.window.showErrorMessage(`Failed to parse Python JSON. stderr: ${stderr}`);
                 return;
             }
             if (!payload.ok || !payload.svg) {
-                vscode.window.showErrorMessage("No SVG produced.");
+                console.error("No SVG produced.");
+                //vscode.window.showErrorMessage("No SVG produced.");
                 return;
             }
             // Send SVG to the webview
@@ -172,17 +176,18 @@ class HelloWorldPanel {
             // (example path: diagrams/diagram.svg)
         });
         process.stdout.on('data', (data) => {
-            vscode.window.showInformationMessage(`Python says: ${data}`);
+            console.log(`Python Output: ${data}`);
+            //vscode.window.showInformationMessage(`Python says: ${data}`);
         });
         // ADD THIS: Catch Python's internal errors (like FileNotFoundError)
         process.stderr.on('data', (data) => {
             console.error(`Python Error: ${data.toString()}`);
-            vscode.window.showErrorMessage(`Python Error: ${data.toString()}`);
+            //vscode.window.showErrorMessage(`Python Error: ${data.toString()}`);
         });
         // ADD THIS: Catch system errors (like "python3 command not found")
         process.on('error', (err) => {
             console.error('Failed to start process:', err);
-            vscode.window.showErrorMessage(`Process error: ${err.message}`);
+            //vscode.window.showErrorMessage(`Process error: ${err.message}`);
         });
         this._panel.webview.html = this._getHtmlForWebview(webview);
         webview.onDidReceiveMessage(async (data) => {
@@ -191,14 +196,16 @@ class HelloWorldPanel {
                     if (!data.value) {
                         return;
                     }
-                    vscode.window.showInformationMessage(data.value);
+                    console.log(data.value);
+                    //vscode.window.showInformationMessage(data.value);
                     break;
                 }
                 case "onError": {
                     if (!data.value) {
                         return;
                     }
-                    vscode.window.showErrorMessage(data.value);
+                    console.error(data.value);
+                    //vscode.window.showErrorMessage(data.value);
                     break;
                 }
                 //case "tokens": {

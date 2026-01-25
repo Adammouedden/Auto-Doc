@@ -58,7 +58,7 @@ function activate(context) {
             vscode.window.showErrorMessage('No api key found. Please set your Gemini API key to use this feature.');
             return;
         }
-        vscode.window.showInformationMessage('Hello World from autoDoc!');
+        vscode.window.showInformationMessage('Processing your request for auto-documentation...');
         //Access the activeTextEditor to find out what file we are currently in
         const editor = vscode.window.activeTextEditor;
         //Exception handling for if the editor is not open
@@ -78,17 +78,18 @@ function activate(context) {
         console.log(scriptPath);
         const process = cp.spawn(pythonPath, [scriptPath, '--filepath', folderUri.fsPath, '--apikey', apiKey], { cwd: folderUri.fsPath });
         process.stdout.on('data', (data) => {
-            vscode.window.showInformationMessage(`Python says: ${data}`);
+            console.log(`Python Output: ${data}`);
+            //vscode.window.showInformationMessage(`Python says: ${data}`);
         });
         // ADD THIS: Catch Python's internal errors (like FileNotFoundError)
         process.stderr.on('data', (data) => {
             console.error(`Python Error: ${data.toString()}`);
-            vscode.window.showErrorMessage(`Python Error: ${data.toString()}`);
+            //vscode.window.showErrorMessage(`Python Error: ${data.toString()}`);
         });
         // ADD THIS: Catch system errors (like "python3 command not found")
         process.on('error', (err) => {
             console.error('Failed to start process:', err);
-            vscode.window.showErrorMessage(`Process error: ${err.message}`);
+            //vscode.window.showErrorMessage(`Process error: ${err.message}`);
         });
     });
     context.subscriptions.push(disposable);
