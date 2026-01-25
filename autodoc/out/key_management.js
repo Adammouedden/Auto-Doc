@@ -33,16 +33,23 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-const assert = __importStar(require("assert"));
-// You can import and use all API from the 'vscode' module
-// as well as import your extension to test it
+exports.getAndStoreApiKey = getAndStoreApiKey;
+exports.getGeminiKey = getGeminiKey;
 const vscode = __importStar(require("vscode"));
-// import * as myExtension from '../../extension';
-suite('Extension Test Suite', () => {
-    vscode.window.showInformationMessage('Start all tests.');
-    test('Sample test', () => {
-        assert.strictEqual(-1, [1, 2, 3].indexOf(5));
-        assert.strictEqual(-1, [1, 2, 3].indexOf(0));
+async function getAndStoreApiKey(context) {
+    const apiKey = await vscode.window.showInputBox({
+        prompt: "Enter your Gemini API Key",
+        placeHolder: "AIza...",
+        password: true, // This hides the characters as they type
+        ignoreFocusOut: true
     });
-});
-//# sourceMappingURL=extension.test.js.map
+    if (apiKey) {
+        // Store it securely
+        await context.secrets.store('gemini_api_key', apiKey);
+        vscode.window.showInformationMessage("Gemini API Key saved securely.");
+    }
+}
+async function getGeminiKey(context) {
+    return await context.secrets.get('gemini_api_key');
+}
+//# sourceMappingURL=key_management.js.map

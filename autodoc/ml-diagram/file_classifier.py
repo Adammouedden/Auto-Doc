@@ -1,6 +1,6 @@
 from google import genai
 from pydantic import BaseModel, Field
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 from pathlib import Path
 
 #from tex2img import Latex2PNG
@@ -10,9 +10,9 @@ import json
 import os
 import re
 
-load_dotenv(override=True)
+#load_dotenv(override=True)
 
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+#GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 MODEL = "gemini-3-flash-preview"
 
 class isModel(BaseModel):
@@ -90,7 +90,8 @@ class DiagramGenerator():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--filepath')
+    parser.add_argument('--filepath', type=str)
+    parser.add_argument('--apikey', type=str)
     args = parser.parse_args()
 
     #file_path = r"alexnet.txt"
@@ -99,7 +100,8 @@ if __name__ == "__main__":
         #print(f"Reading in {file_path}...")
         text = FILE.read()
     
-    generator = DiagramGenerator(GEMINI_API_KEY, MODEL)
+    apikey = args.apikey
+    generator = DiagramGenerator(apikey, MODEL)
     is_valid_model = generator.validateML(text)
     if is_valid_model:
         #print("Valid model detected! Here is your diagram code:")

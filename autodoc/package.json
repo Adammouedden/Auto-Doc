@@ -22,8 +22,8 @@
         "title": "ML Gen"
       },
       {
-        "command": "autodoc.docGen",
-        "title": "A Gen"
+        "command": "autodoc.delKey",
+        "title": "Delete API Key"
       },
       {
         "command": "autodoc.docGen",
@@ -43,7 +43,7 @@
       },
       {
         "key": "ctrl+shift+h",
-        "command": "autodoc.docGen",
+        "command": "autodoc.delKey",
         "when": "editorTextFocus"
       },
       {

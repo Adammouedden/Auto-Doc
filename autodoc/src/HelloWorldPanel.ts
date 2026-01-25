@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import * as cp from "child_process";
 import { getNonce } from "./getNonce";
+import { getAndStoreApiKey, getGeminiKey } from "./key_management";
 
 export class HelloWorldPanel {
   /**
@@ -14,10 +15,23 @@ export class HelloWorldPanel {
   private readonly _extensionUri: vscode.Uri;
   private _disposables: vscode.Disposable[] = [];
   
-  private _readmes: string[] = [];
   public context: vscode.ExtensionContext;
 
-  public static createOrShow(extensionUri: vscode.Uri, context: vscode.ExtensionContext) {
+  private _apikey: string;
+
+  public static async createOrShow(extensionUri: vscode.Uri, context: vscode.ExtensionContext) {
+    let apiKey = await getGeminiKey(context);
+    
+    if (!apiKey) {
+        await getAndStoreApiKey(context);
+        apiKey = await getGeminiKey(context); // Try again after saving
+    }
+
+    if (!apiKey) {
+        vscode.window.showErrorMessage('No api key found. Please set your Gemini API key to use this feature.'); 	
+        return;
+    }
+
     const column = vscode.window.activeTextEditor
       ? vscode.window.activeTextEditor.viewColumn
       : undefined;
@@ -46,7 +60,7 @@ export class HelloWorldPanel {
       }
     );
 
-    HelloWorldPanel.currentPanel = new HelloWorldPanel(panel, extensionUri, context);
+    HelloWorldPanel.currentPanel = new HelloWorldPanel(panel, extensionUri, context, apiKey);
   }
 
   public static kill() {
@@ -54,13 +68,14 @@ export class HelloWorldPanel {
     HelloWorldPanel.currentPanel = undefined;
   }
 
-  public static revive(panel: vscode.WebviewPanel, extensionUri: vscode.Uri, context: vscode.ExtensionContext) {
-    HelloWorldPanel.currentPanel = new HelloWorldPanel(panel, extensionUri, context);
+  public static revive(panel: vscode.WebviewPanel, extensionUri: vscode.Uri, context: vscode.ExtensionContext, apikey: string) {
+    HelloWorldPanel.currentPanel = new HelloWorldPanel(panel, extensionUri, context, apikey);
   }
 
-  private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri, context: vscode.ExtensionContext) {
+  private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri, context: vscode.ExtensionContext, apikey: string) {
     this._panel = panel;
     this._extensionUri = extensionUri;
+    this._apikey = apikey;
 
     this.context = context;
     // Set the webview's initial html content
@@ -122,7 +137,7 @@ export class HelloWorldPanel {
     let rawScriptPath: string = String.raw`ml-diagram\file_classifier.py`
     const scriptPath = this.context.asAbsolutePath(rawScriptPath);
 
-    const process = cp.spawn(pythonPath, [scriptPath, "--filepath", fileUri.fsPath], {
+    const process = cp.spawn(pythonPath, [scriptPath, "--filepath", fileUri.fsPath, "--apikey", this._apikey], {
       cwd: folderUri.fsPath
     }); 
 
@@ -175,8 +190,6 @@ export class HelloWorldPanel {
         console.error('Failed to start process:', err);
         vscode.window.showErrorMessage(`Process error: ${err.message}`);
     });
-
-    //this._readmes.push()
 
     this._panel.webview.html = this._getHtmlForWebview(webview);
     webview.onDidReceiveMessage(async (data) => {

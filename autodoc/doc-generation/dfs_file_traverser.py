@@ -32,7 +32,7 @@ def is_generated_readme(item: Path) -> bool:
     return item.is_file() and item.name == f"{item.parent.name}README.md"
 
 
-def generate_doc(directory: Path):
+def generate_doc(directory: Path, apikey: str):
     #print(f"doc for {directory}")
     
 
@@ -50,7 +50,7 @@ def generate_doc(directory: Path):
             text.append(content)
     
     prompt_input = "\n".join(text)
-    md_doc_text= text_generator.llm_response(0, prompt_input)
+    md_doc_text= text_generator.llm_response(0, prompt_input, apikey)
 
     md_path= directory/"README.md"
 
@@ -61,10 +61,8 @@ def generate_doc(directory: Path):
     with md_path.open('w', encoding='utf-8', errors='ignore') as file:
         file.write(md_doc_text)
         
-        
-    
 
-def generate_doc_from_child(directory: Path):
+def generate_doc_from_child(directory: Path, apikey: str):
     # TODO: aggregate child docs into this directory's doc
     #print(f"Aggregating for: {directory}")
 
@@ -85,7 +83,7 @@ def generate_doc_from_child(directory: Path):
             text.append(get_item_text(item))
         
     prompt_input = "\n".join(text)
-    md_doc_text = text_generator.llm_response(0, prompt_input)
+    md_doc_text = text_generator.llm_response(0, prompt_input, apikey)
 
     md_path= directory/"README.md"
 
@@ -139,7 +137,7 @@ def get_item_text(item:Path)->str:
         return ""
             
 
-def depth_traversal(current_directory: Path):
+def depth_traversal(current_directory: Path, apikey: str):
     if current_directory.name in ignore_list:
         return
 
@@ -147,24 +145,26 @@ def depth_traversal(current_directory: Path):
         return
     
     if is_leaf_directory(current_directory):
-        generate_doc(current_directory)
+        generate_doc(current_directory, apikey)
         return 
 
     for item in current_directory.iterdir():
         if(item.is_dir() and item.name not in ignore_list):
-            depth_traversal(item)
+            depth_traversal(item, apikey)
 
-    generate_doc_from_child(current_directory)
+    generate_doc_from_child(current_directory, apikey)
 
 
 def main():
     parser = argparse.ArgumentParser(description="AutoDoc relative file path for current working directory")
     parser.add_argument("--filepath", type=str, default="")
+    parser.add_argument("--apikey", type=str, default="")
     parseargs = parser.parse_args()
 
     current_directory= Path(parseargs.filepath)
+    apikey = parseargs.apikey
     #current_directory = Path(r"C:\Users\hello\Auto-Doc\test_directory")
-    depth_traversal(current_directory) 
+    depth_traversal(current_directory, apikey) 
 
     print("Completed Auto Doc")             
 

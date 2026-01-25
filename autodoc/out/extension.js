@@ -38,10 +38,26 @@ exports.deactivate = deactivate;
 const vscode = __importStar(require("vscode"));
 const cp = __importStar(require("child_process"));
 const HelloWorldPanel_1 = require("./HelloWorldPanel");
+const key_management_1 = require("./key_management");
 console.log('AutoDoc extension is loading...');
 function activate(context) {
     console.log('Congratulations, your extension "autodoc" is now active!');
-    const disposable = vscode.commands.registerCommand('autodoc.docGen', () => {
+    const disposable3 = vscode.commands.registerCommand('autodoc.delKey', async () => {
+        // To delete the key
+        await context.secrets.delete('gemini_api_key');
+        vscode.window.showInformationMessage('We deleted your Gemini API key from secure storage.');
+    });
+    context.subscriptions.push(disposable3);
+    const disposable = vscode.commands.registerCommand('autodoc.docGen', async () => {
+        let apiKey = await (0, key_management_1.getGeminiKey)(context);
+        if (!apiKey) {
+            await (0, key_management_1.getAndStoreApiKey)(context);
+            apiKey = await (0, key_management_1.getGeminiKey)(context); // Try again after saving
+        }
+        if (!apiKey) {
+            vscode.window.showErrorMessage('No api key found. Please set your Gemini API key to use this feature.');
+            return;
+        }
         vscode.window.showInformationMessage('Hello World from autoDoc!');
         //Access the activeTextEditor to find out what file we are currently in
         const editor = vscode.window.activeTextEditor;
@@ -60,7 +76,7 @@ function activate(context) {
         let rawScriptPath = String.raw `doc-generation\dfs_file_traverser.py`;
         const scriptPath = context.asAbsolutePath(rawScriptPath);
         console.log(scriptPath);
-        const process = cp.spawn(pythonPath, [scriptPath, '--filepath', folderUri.fsPath], { cwd: folderUri.fsPath });
+        const process = cp.spawn(pythonPath, [scriptPath, '--filepath', folderUri.fsPath, '--apikey', apiKey], { cwd: folderUri.fsPath });
         process.stdout.on('data', (data) => {
             vscode.window.showInformationMessage(`Python says: ${data}`);
         });

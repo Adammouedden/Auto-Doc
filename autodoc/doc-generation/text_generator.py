@@ -1,7 +1,7 @@
 from google import genai
 from google.genai import types
 import os
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 
 prompts = [
     (
@@ -39,13 +39,14 @@ prompts = [
 ]
 
 
-load_dotenv(override=True)
-api_key = os.getenv('GOOGLE_API_KEY')
+#load_dotenv(override=True)
+#api_key = os.getenv('GOOGLE_API_KEY')
 
-client = genai.Client(api_key=api_key)
+#client = genai.Client(api_key=api_key)
 
-def llm_response(prompt_type: int, input_string:str)->str:
-    
+def llm_response(prompt_type: int, input_string:str, apikey: str)->str:
+    client = genai.Client(api_key=apikey)
+
     response = client.models.generate_content(
         model = "gemini-2.5-flash",
         contents= input_string,
