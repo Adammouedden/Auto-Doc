@@ -1,0 +1,106 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+<rect width="100%" height="100%" fill="#f8f9fa"/>
+
+  <!-- Background -->
+  <rect width="800" height="600" fill="#ffffff" />
+  
+  <!-- Definitions for Gradients and Markers -->
+  <defs>
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e1f5fe;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#01579b;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="orangeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fff3e0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e65100;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="purpleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f3e5f5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4a148c;stop-opacity:1" />
+    </linearGradient>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#546e7a" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="400" y="40" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="#263238">Multi-Head Attention Architecture</text>
+
+  <!-- Inputs Q, K, V -->
+  <g transform="translate(100, 500)">
+    <path d="M0,0 L60,-20 L120,0 L60,20 Z" fill="#cfd8dc" stroke="#546e7a" stroke-width="1" />
+    <text x="60" y="5" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold">Q, K, V</text>
+    <text x="60" y="35" text-anchor="middle" font-family="Arial" font-size="11" fill="#546e7a">(B, L, d_model)</text>
+  </g>
+
+  <!-- Linear Projections Layer -->
+  <g transform="translate(80, 380)">
+    <rect x="0" y="0" width="160" height="40" rx="5" fill="url(#blueGrad)" stroke="#01579b" stroke-width="1.5" />
+    <text x="80" y="25" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="white">Linear Projections</text>
+    <text x="175" y="25" font-family="Arial" font-size="11" fill="#01579b">W_q, W_k, W_v</text>
+  </g>
+
+  <!-- Splitting into Heads (3D Stack) -->
+  <g transform="translate(120, 240)">
+    <!-- Head 3 -->
+    <path d="M20,-10 L140,-40 L200,-10 L80,20 Z" fill="#e1f5fe" stroke="#01579b" stroke-opacity="0.3" />
+    <!-- Head 2 -->
+    <path d="M10,-5 L130,-35 L190,-5 L70,25 Z" fill="#b3e5fc" stroke="#01579b" stroke-opacity="0.5" />
+    <!-- Head 1 -->
+    <path d="M0,0 L120,-30 L180,0 L60,30 Z" fill="#81d4fa" stroke="#01579b" stroke-width="1.5" />
+    <text x="90" y="5" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#01579b">Split into h Heads</text>
+    <text x="210" y="0" font-family="Arial" font-size="11" fill="#01579b">(B*h, L, d_head)</text>
+  </g>
+
+  <!-- Scaled Dot-Product Attention Block -->
+  <g transform="translate(380, 200)">
+    <rect x="0" y="0" width="220" height="120" rx="10" fill="url(#orangeGrad)" stroke="#e65100" stroke-width="2" />
+    <text x="110" y="30" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="white">Scaled Dot-Product</text>
+    <text x="110" y="50" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="white">Attention</text>
+    
+    <rect x="20" y="70" width="180" height="35" rx="5" fill="rgba(255,255,255,0.2)" stroke="white" />
+    <text x="110" y="92" text-anchor="middle" font-family="serif" font-size="14" font-style="italic" fill="white">Softmax(QKᵀ / √d_k)V</text>
+  </g>
+
+  <!-- Concatenate Layer -->
+  <g transform="translate(500, 80)">
+    <rect x="0" y="0" width="160" height="40" rx="5" fill="url(#purpleGrad)" stroke="#4a148c" stroke-width="1.5" />
+    <text x="80" y="25" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="white">Concatenate</text>
+    <text x="175" y="25" font-family="Arial" font-size="11" fill="#4a148c">(B, L, d_model)</text>
+  </g>
+
+  <!-- Final Output Vector -->
+  <g transform="translate(520, 10)">
+    <path d="M0,0 L60,-15 L120,0 L60,15 Z" fill="#f3e5f5" stroke="#4a148c" stroke-width="1" />
+    <text x="60" y="3" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold">Output Context</text>
+  </g>
+
+  <!-- Flow Arrows -->
+  <g fill="none" stroke="#546e7a" stroke-width="2" marker-end="url(#arrowhead)">
+    <!-- Input to Linear -->
+    <path d="M160,480 L160,425" />
+    <!-- Linear to Split -->
+    <path d="M160,380 L160,285" />
+    <!-- Split to Attention -->
+    <path d="M300,240 L375,240" />
+    <!-- Attention to Concatenate -->
+    <path d="M600,200 L600,125" />
+    <!-- Concatenate to Output -->
+    <path d="M580,80 L580,30" />
+  </g>
+
+  <!-- Mask Input -->
+  <g transform="translate(430, 360)">
+    <rect x="0" y="0" width="60" height="25" rx="3" fill="#eceff1" stroke="#b0bec5" />
+    <text x="30" y="17" text-anchor="middle" font-family="Arial" font-size="11" font-weight="bold">Mask</text>
+    <path d="M60,12 L80,12 L80,-35" fill="none" stroke="#b0bec5" stroke-width="1.5" stroke-dasharray="4" marker-end="url(#arrowhead)" />
+  </g>
+
+  <!-- Legend / Annotations -->
+  <g transform="translate(50, 50)">
+    <text x="0" y="0" font-family="Arial" font-size="12" fill="#37474f" font-weight="bold">Parameters:</text>
+    <text x="0" y="20" font-family="Arial" font-size="11" fill="#546e7a">d_model = 512</text>
+    <text x="0" y="35" font-family="Arial" font-size="11" fill="#546e7a">num_heads = 8</text>
+    <text x="0" y="50" font-family="Arial" font-size="11" fill="#546e7a">d_head = 64</text>
+  </g>
+</svg>
