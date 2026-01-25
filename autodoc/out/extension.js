@@ -34,12 +34,14 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.activate = activate;
+exports.deactivate = deactivate;
 const vscode = __importStar(require("vscode"));
 const cp = __importStar(require("child_process"));
+const HelloWorldPanel_1 = require("./HelloWorldPanel");
 console.log('AutoDoc extension is loading...');
 function activate(context) {
     console.log('Congratulations, your extension "autodoc" is now active!');
-    const disposable = vscode.commands.registerCommand('autodoc.helloWorld', () => {
+    const disposable = vscode.commands.registerCommand('autodoc.docGen', () => {
         vscode.window.showInformationMessage('Hello World from autoDoc!');
         //Access the activeTextEditor to find out what file we are currently in
         const editor = vscode.window.activeTextEditor;
@@ -74,5 +76,10 @@ function activate(context) {
         });
     });
     context.subscriptions.push(disposable);
+    const disposable2 = vscode.commands.registerCommand('autodoc.mlGen', () => {
+        HelloWorldPanel_1.HelloWorldPanel.createOrShow(context.extensionUri, context);
+    });
+    context.subscriptions.push(disposable2);
 }
+function deactivate() { }
 //# sourceMappingURL=extension.js.map

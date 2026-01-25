@@ -128,7 +128,38 @@ class HelloWorldPanel {
         const pythonPath = "python";
         let rawScriptPath = String.raw `doc-generation\class_finder.py`;
         const scriptPath = this.context.asAbsolutePath(rawScriptPath);
-        const process = cp.spawn(pythonPath, [scriptPath, '--filepath', fileUri.fsPath], { cwd: folderUri.fsPath });
+        const proccess = cp.spawn(pythonPath, [scriptPath, "--filepath", fileUri.fsPath], {
+            cwd: folderUri.fsPath
+        });
+        let stdout = "";
+        let stderr = "";
+        proccess.stdout.on("data", (d) => { stdout += d.toString(); });
+        proccess.stderr.on("data", (d) => { stderr += d.toString(); });
+        proccess.on("close", (code) => {
+            if (code !== 0) {
+                vscode.window.showErrorMessage(`Python exited with code ${code}: ${stderr}`);
+                return;
+            }
+            let payload;
+            try {
+                payload = JSON.parse(stdout);
+            }
+            catch (e) {
+                vscode.window.showErrorMessage(`Failed to parse Python JSON. stderr: ${stderr}`);
+                return;
+            }
+            if (!payload.ok || !payload.svg) {
+                vscode.window.showErrorMessage("No SVG produced.");
+                return;
+            }
+            // Send SVG to the webview
+            this._panel.webview.postMessage({
+                type: "renderSvg",
+                svg: payload.svg
+            });
+            // Optional: save to user folder
+            // (example path: diagrams/diagram.svg)
+        });
         process.stdout.on('data', (data) => {
             vscode.window.showInformationMessage(`Python says: ${data}`);
         });
@@ -182,6 +213,7 @@ class HelloWorldPanel {
         return `<!DOCTYPE html>
 			<html lang="en">
 			<head>
+      <div id="root"></div>
 				<meta charset="UTF-8">
 				<!--
 					Use a content security policy to only allow loading images from https or from our extension directory,

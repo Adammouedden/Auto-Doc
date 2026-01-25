@@ -38,47 +38,32 @@ class DiagramGenerator():
         
         return json.loads(response.text)['is_model']
     
-    def extract_architecture(self, text):
-        """
-        For a block of code input from a FILE, extract only the relevant ML architecture blocks/code.
-        
-        :param self: Description
-        :param text: string, code from FILE, input by user.
-        """
-        architecture_isolated = self.client.models.generate_content(
-            model=self.model,
-            contents="Extract only the machine learning architecture block or code that will be useful for drawing the diagram from this code file:" + text
-        )
-
-        return architecture_isolated
-
-    def render_latex(self, latex):
-        renderer = Latex2PNG(api_url="https://latex.ytotech.com/builds/sync")
-
-        png_data = renderer.compile(latex)
-        image_file = 'output.png'
-
-        with open(image_file, 'wb') as FILE:
-            FILE.write(png_data)
-
-        print(f"LaTeX rendered and outputted as {image_file}.")
-
-        return image_file
-    
-    def simulate_latex_render(self):
-        #subprocess.run
-        pass
+    def extract_svg(self, diagram_code: str):
+        match = re.search(r"```svg\s*(.*?)\s*```", diagram_code, re.DOTALL | re.IGNORECASE)
+        if match:
+            return match.group(1)
+        match = re.search(r"(<svg[\s\S]*?</svg>)", diagram_code, re.IGNORECASE)
+        if match:
+            return match.group(1)
+        return None
 
     def generate_diagram(self, code):     #TODO: input may be interpreted by Gemini first ("extract the exact architecture from this code")
-        
-        diagram_code = self.client.models.generate_content(
+        response = self.client.models.generate_content(
             model=self.model,
             contents=self.system_prompt+"CODE TO ANALYZE:\n"+code,
         )
         
-        diagram_code = diagram_code.candidates[0].content.parts[0].text
+        text = response.candidates[0].content.parts[0].text
+        svg = self.extract_svg(text)
 
-        print(diagram_code)
+        payload = {
+            "ok": bool(svg),
+            "svg": svg,
+            "raw": None if svg else text,
+        }
+
+        print(json.dumps(payload))
+
         # match = re.search(r"```latex\s*(.*?)\s*```", diagram_code, re.DOTALL)
         # latex_code = match.group(1) if match else None
         
@@ -93,12 +78,12 @@ class DiagramGenerator():
 if __name__ == "__main__":
     file_path = r"alexnet.txt"
     with open(file_path, mode="r") as FILE:    # TODO: switch with real file path
-        print(f"Reading in {file_path}...")
+        #print(f"Reading in {file_path}...")
         text = FILE.read()
     
     generator = DiagramGenerator(GEMINI_API_KEY, MODEL)
     is_valid_model = generator.validateML(text)
     if is_valid_model:
-        print("Valid model detected! Here is your diagram code:")
+        #print("Valid model detected! Here is your diagram code:")
         generator.generate_diagram(text)
     

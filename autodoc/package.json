@@ -14,14 +14,41 @@
   "contributes": {
     "commands": [
       {
-        "command": "autodoc.helloWorld",
-        "title": "Auto Doc"
+        "command": "autodoc.docGen",
+        "title": "Doc Gen"
+      },
+      {
+        "command": "autodoc.mlGen",
+        "title": "ML Gen"
+      },
+      {
+        "command": "autodoc.docGen",
+        "title": "A Gen"
+      },
+      {
+        "command": "autodoc.docGen",
+        "title": "B Gen"
       }
     ],
     "keybindings": [
       {
         "key": "ctrl+shift+a",
-        "command": "autodoc.helloWorld",
+        "command": "autodoc.docGen",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "ctrl+shift+m",
+        "command": "autodoc.mlGen",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "ctrl+shift+h",
+        "command": "autodoc.docGen",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "ctrl+shift+s",
+        "command": "autodoc.docGen",
         "when": "editorTextFocus"
       }
     ]
