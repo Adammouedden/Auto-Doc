@@ -119,20 +119,20 @@ export class HelloWorldPanel {
     console.log("Current file directory:", folderUri.fsPath);
 
     const pythonPath = "python";
-    let rawScriptPath: string = String.raw`doc-generation\class_finder.py`
+    let rawScriptPath: string = String.raw`ml-diagram\file_classifier.py`
     const scriptPath = this.context.asAbsolutePath(rawScriptPath);
 
-    const proccess = cp.spawn(pythonPath, [scriptPath, "--filepath", fileUri.fsPath], {
+    const process = cp.spawn(pythonPath, [scriptPath, "--filepath", fileUri.fsPath], {
       cwd: folderUri.fsPath
     }); 
 
     let stdout = "";
     let stderr = "";
     
-    proccess.stdout.on("data", (d) => { stdout += d.toString(); });
-    proccess.stderr.on("data", (d) => { stderr += d.toString(); });
+    process.stdout.on("data", (d) => { stdout += d.toString(); });
+    process.stderr.on("data", (d) => { stderr += d.toString(); });
 
-    proccess.on("close", (code) => {
+    process.on("close", (code) => {
         if (code !== 0) {
           vscode.window.showErrorMessage(`Python exited with code ${code}: ${stderr}`);
           return;
@@ -248,8 +248,6 @@ export class HelloWorldPanel {
         </script>
 			</head>
             <body>
-                <h1>Hello my world</h1>
-                <button onclick="alert('Hello world!')">Click me</button>
 	        </body>
 				<script nonce="${nonce}" src="${scriptUri}"></script>
 	</html>`;
