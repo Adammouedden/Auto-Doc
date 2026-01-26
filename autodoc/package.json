@@ -1,8 +1,9 @@
 {
-  "name": "autodoc",
-  "displayName": "autoDoc",
+  "name": "betterautodocumentation",
+  "displayName": "Auto Docs",
+  "publisher": "WhoASKD",
   "description": "Summarizes, documents, and generates figures to help the developer understand the repository folder by folder.",
-  "version": "0.0.1",
+  "version": "0.0.5",
   "engines": {
     "vscode": "^1.108.1"
   },
@@ -26,8 +27,8 @@
         "title": "Delete API Key"
       },
       {
-        "command": "autodoc.docGen",
-        "title": "B Gen"
+        "command": "autodoc.visualize",
+        "title": "Visualize Code"
       }
     ],
     "keybindings": [
@@ -48,7 +49,7 @@
       },
       {
         "key": "ctrl+shift+s",
-        "command": "autodoc.docGen",
+        "command": "autodoc.visualize",
         "when": "editorTextFocus"
       }
     ]

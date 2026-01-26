@@ -39,64 +39,56 @@ const vscode = __importStar(require("vscode"));
 const cp = __importStar(require("child_process"));
 const HelloWorldPanel_1 = require("./HelloWorldPanel");
 const key_management_1 = require("./key_management");
+const VisualizePanel_1 = require("./VisualizePanel");
 console.log('AutoDoc extension is loading...');
 function activate(context) {
     console.log('Congratulations, your extension "autodoc" is now active!');
+    // Delete key
     const disposable3 = vscode.commands.registerCommand('autodoc.delKey', async () => {
-        // To delete the key
         await context.secrets.delete('gemini_api_key');
         vscode.window.showInformationMessage('We deleted your Gemini API key from secure storage.');
     });
     context.subscriptions.push(disposable3);
+    // Doc Gen
     const disposable = vscode.commands.registerCommand('autodoc.docGen', async () => {
         let apiKey = await (0, key_management_1.getGeminiKey)(context);
         if (!apiKey) {
             await (0, key_management_1.getAndStoreApiKey)(context);
-            apiKey = await (0, key_management_1.getGeminiKey)(context); // Try again after saving
+            apiKey = await (0, key_management_1.getGeminiKey)(context);
         }
         if (!apiKey) {
             vscode.window.showErrorMessage('No api key found. Please set your Gemini API key to use this feature.');
             return;
         }
         vscode.window.showInformationMessage('Processing your request for auto-documentation...');
-        //Access the activeTextEditor to find out what file we are currently in
         const editor = vscode.window.activeTextEditor;
-        //Exception handling for if the editor is not open
         if (!editor) {
             vscode.window.showErrorMessage('No active file');
             return;
         }
-        //Get the fileURI for the document we have currently opened, along with the folder URI by using the reference to the parent directory '..'
         const fileUri = editor.document.uri;
         const folderUri = vscode.Uri.joinPath(fileUri, '..');
         console.log("Current file:", fileUri.fsPath);
         console.log("Current file directory:", folderUri.fsPath);
-        // Find the user's python path (important for Linux/Kubuntu)
         const pythonPath = "python";
-        let rawScriptPath = String.raw `doc-generation\dfs_file_traverser.py`;
+        const rawScriptPath = String.raw `doc-generation\dfs_file_traverser.py`;
         const scriptPath = context.asAbsolutePath(rawScriptPath);
-        console.log(scriptPath);
         const process = cp.spawn(pythonPath, [scriptPath, '--filepath', folderUri.fsPath, '--apikey', apiKey], { cwd: folderUri.fsPath });
-        process.stdout.on('data', (data) => {
-            console.log(`Python Output: ${data}`);
-            //vscode.window.showInformationMessage(`Python says: ${data}`);
-        });
-        // ADD THIS: Catch Python's internal errors (like FileNotFoundError)
-        process.stderr.on('data', (data) => {
-            console.error(`Python Error: ${data.toString()}`);
-            //vscode.window.showErrorMessage(`Python Error: ${data.toString()}`);
-        });
-        // ADD THIS: Catch system errors (like "python3 command not found")
-        process.on('error', (err) => {
-            console.error('Failed to start process:', err);
-            //vscode.window.showErrorMessage(`Process error: ${err.message}`);
-        });
+        process.stdout.on('data', (data) => console.log(`Python Output: ${data}`));
+        process.stderr.on('data', (data) => console.error(`Python Error: ${data.toString()}`));
+        process.on('error', (err) => console.error('Failed to start process:', err));
     });
     context.subscriptions.push(disposable);
+    // ML Gen
     const disposable2 = vscode.commands.registerCommand('autodoc.mlGen', () => {
         HelloWorldPanel_1.HelloWorldPanel.createOrShow(context.extensionUri, context);
     });
     context.subscriptions.push(disposable2);
+    // Visualize Code (Ctrl+Shift+S)
+    const disposable4 = vscode.commands.registerCommand('autodoc.visualize', () => {
+        VisualizePanel_1.VisualizePanel.createOrShow(context.extensionUri, context);
+    });
+    context.subscriptions.push(disposable4);
 }
 function deactivate() { }
 //# sourceMappingURL=extension.js.map

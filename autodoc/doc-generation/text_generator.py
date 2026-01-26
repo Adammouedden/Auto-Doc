@@ -41,8 +41,9 @@ prompts = [
 
 #load_dotenv(override=True)
 #api_key = os.getenv('GOOGLE_API_KEY')
-
 #client = genai.Client(api_key=api_key)
+
+
 
 def llm_response(prompt_type: int, input_string:str, apikey: str)->str:
     client = genai.Client(api_key=apikey)
