@@ -1,71 +1,52 @@
-# autodoc README
+# AutoDoc Extension
 
-This is the README for your extension "autodoc". After writing up a brief description, we recommend including the following sections.
+Auto Doc helps developers rapidly understand unfamiliar codebases by automatically summarizing files, documenting logic, and generating structural figures on demand. Designed for fast, folder-by-folder exploration of a repository.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- Summarizes code files and directories
+- Generates documentation to explain structure and behavior
+- Produces figures and visualizations for ML-related code
+- Folder-aware execution for context-based documentation
+- Clean output, optimized for developers inspecting large repos
 
-For example if there is an image subfolder under your extension project workspace:
+## Commands
 
-\!\[feature X\]\(images/feature-x.png\)
+| Command | Description |
+|--------|-------------|
+| `Doc Gen` | Generate documentation for the current directory |
+| `ML Gen` | Generate ML-specific figures and summaries |
+| `Delete API Key` | Clear stored API keys used by the extension |
+| `Doc Visualize` | AI Generated Visualization of Code Logic |
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
 
-## Requirements
+## Keybindings
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+| Keybinding | Action |
+|-----------|--------|
+| `Ctrl + Shift + A` | Run `Doc Gen` |
+| `Ctrl + Shift + M` | Run `ML Gen` |
+| `Ctrl + Shift + H` | Run `Delete API Key` |
+| `Ctrl + Shift + S` | Run `Doc Visualize` |
 
-## Extension Settings
+Keybindings only activate when the editor is focused.
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+## Usage
 
-For example:
+1. Open a file or folder in VS Code.
+2. Trigger one of the commands via:
+   - Command Palette (`Ctrl + Shift + P`), or
+   - The keybindings listed above.
+3. Auto Doc processes context and outputs structured summaries and figures.
 
-This extension contributes the following settings:
+## Suggested Workflow
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+- Start in a top-level directory to get a high-level summary.
+- Drill down into subfolders to explore behavior and architecture.
+- Use `ML Gen` on model/ML directories for specialized analysis.
 
-## Known Issues
+## Future Enhancements
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+- Expanded language support
+- Richer interactivity and visual navigation
+- Better ML model graphing and dependency tracing

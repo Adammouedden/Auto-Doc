@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"></script>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f7f6;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+    }
+    .container {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        width: 90%;
+        max-width: 900px;
+    }
+    h2 { color: #2c3e50; text-align: center; }
+    .legend {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: 20px;
+        font-size: 0.9em;
+    }
+    .legend-item { display: flex; align-items: center; gap: 5px; }
+    .box { width: 15px; height: 15px; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Auto-Doc Logic Flow</h2>
+    <div class="legend">
+        <div class="legend-item"><div class="box" style="background:#e1f5fe; border: 1px solid #01579b;"></div> Entry Point</div>
+        <div class="legend-item"><div class="box" style="background:#fff3e0; border: 1px solid #e65100;"></div> Processing Logic</div>
+        <div class="legend-item"><div class="box" style="background:#f1f8e9; border: 1px solid #33691e;"></div> Validation Helper</div>
+    </div>
+    
+    <div class="mermaid">
+    graph TD
+        %% Nodes
+        Main([main])
+        DT(depth_traversal)
+        Leaf{is_leaf_directory}
+        GD(generate_doc)
+        GDC(generate_doc_from_child)
+        GIT(get_item_text)
+        GDD(get_dir_doc)
+        VAL1[is_text_file]
+        VAL2[is_generated_readme]
+
+        %% Styling
+        style Main fill:#e1f5fe,stroke:#01579b
+        style DT fill:#fff3e0,stroke:#e65100
+        style Leaf fill:#fff3e0,stroke:#e65100
+        style GD fill:#fff3e0,stroke:#e65100
+        style GDC fill:#fff3e0,stroke:#e65100
+        style GIT fill:#f1f8e9,stroke:#33691e
+        style GDD fill:#f1f8e9,stroke:#33691e
+        style VAL1 fill:#f1f8e9,stroke:#33691e
+        style VAL2 fill:#f1f8e9,stroke:#33691e
+
+        %% Connections
+        Main --> DT
+        DT -- Recurses --> DT
+        DT --> Leaf
+        DT -- "If Leaf" --> GD
+        DT -- "If Not Leaf" --> GDC
+        
+        GD --> VAL2
+        GD --> GIT
+        
+        GDC --> VAL2
+        GDC --> GDD
+        GDC --> GIT
+        
+        GIT --> VAL1
+    </div>
+</div>
+
+<script>
+    mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+</script>
+
+</body>
+</html>
