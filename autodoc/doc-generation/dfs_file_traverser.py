@@ -98,6 +98,7 @@ def generate_doc_from_child(directory: Path, apikey: str):
 def get_dir_doc(directory: Path):
     md_path = directory / "README.md"
 
+    DEBUG_MODE and print(f"Reading from {md_path}")
     if DEBUG_MODE:
         print(f"Reading from: {md_path}")
 

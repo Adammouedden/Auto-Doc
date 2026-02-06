@@ -16,42 +16,42 @@
   "contributes": {
     "commands": [
       {
-        "command": "autodoc.docGen",
+        "command": "auto_doc.docGen",
         "title": "Doc Gen"
       },
       {
-        "command": "autodoc.mlGen",
+        "command": "auto_doc.mlGen",
         "title": "ML Gen"
       },
       {
-        "command": "autodoc.delKey",
+        "command": "auto_doc.delKey",
         "title": "Delete API Key"
       },
       {
-        "command": "autodoc.visualize",
+        "command": "auto_doc.visualize",
         "title": "Visualize Code"
       }
     ],
     "keybindings": [
       {
         "key": "ctrl+shift+a",
-        "command": "autodoc.docGen",
+        "command": "auto_doc.docGen",
         "when": "editorTextFocus && !terminalFocus",
         "override": true
       },
       {
         "key": "ctrl+shift+m",
-        "command": "autodoc.mlGen",
+        "command": "auto_doc.mlGen",
         "when": "editorTextFocus"
       },
       {
         "key": "ctrl+shift+h",
-        "command": "autodoc.delKey",
+        "command": "auto_doc.delKey",
         "when": "editorTextFocus"
       },
       {
         "key": "ctrl+shift+s",
-        "command": "autodoc.visualize",
+        "command": "auto_doc.visualize",
         "when": "editorTextFocus"
       }
     ]

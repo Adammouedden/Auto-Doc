@@ -9,15 +9,8 @@ console.log('AutoDoc extension is loading...');
 export function activate(context: vscode.ExtensionContext) {
 	console.log('Congratulations, your extension "autodoc" is now active!');
 
-	// Delete key
-	const disposable3 = vscode.commands.registerCommand('autodoc.delKey', async () => {
-		await context.secrets.delete('gemini_api_key');
-		vscode.window.showInformationMessage('We deleted your Gemini API key from secure storage.');
-	});
-	context.subscriptions.push(disposable3);
-
 	// Doc Gen
-	const disposable = vscode.commands.registerCommand('autodoc.docGen', async () => {
+	const disposable = vscode.commands.registerCommand('auto_doc.docGen', async () => {
 		let apiKey = await getGeminiKey(context);
 
 		if (!apiKey) {
@@ -56,13 +49,22 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposable);
 
 	// ML Gen
-	const disposable2 = vscode.commands.registerCommand('autodoc.mlGen', () => {
+	const disposable2 = vscode.commands.registerCommand('auto_doc.mlGen', () => {
 		HelloWorldPanel.createOrShow(context.extensionUri, context);
 	});
 	context.subscriptions.push(disposable2);
 
+
+	// Delete key
+	const disposable3 = vscode.commands.registerCommand('auto_doc.delKey', async () => {
+		await context.secrets.delete('gemini_api_key');
+		vscode.window.showInformationMessage('We deleted your Gemini API key from secure storage.');
+	});
+	context.subscriptions.push(disposable3);
+
+
 	// Visualize Code (Ctrl+Shift+S)
-	const disposable4 = vscode.commands.registerCommand('autodoc.visualize', () => {
+	const disposable4 = vscode.commands.registerCommand('auto_doc.visualize', () => {
 		VisualizePanel.createOrShow(context.extensionUri, context);
 	});
 	context.subscriptions.push(disposable4);
