@@ -56,7 +56,7 @@ def generate_doc(directory: Path, apikey: str):
 
     #DEBUG MODE COMMENT
     if DEBUG_MODE:
-        print(f"Writing to: {md_path}")
+        print(f"Writing to: {md_path}", flush=True)
     
     with md_path.open('w', encoding='utf-8', errors='ignore') as file:
         file.write(md_doc_text)
@@ -89,18 +89,17 @@ def generate_doc_from_child(directory: Path, apikey: str):
 
     #DEBUG MODE COMMENT
     if DEBUG_MODE:
-        print(f"Writing to: {md_path}")
+        print(f"Writing to: {md_path}", flush=True)
 
     with md_path.open('w', encoding='utf-8', errors='ignore') as file:
         file.write(md_doc_text)
 
-            
+
 def get_dir_doc(directory: Path):
     md_path = directory / "README.md"
 
-    DEBUG_MODE and print(f"Reading from {md_path}")
     if DEBUG_MODE:
-        print(f"Reading from: {md_path}")
+        print(f"Reading from: {md_path}", flush=True)
 
     if not md_path.exists() or not md_path.is_file():
         return ""

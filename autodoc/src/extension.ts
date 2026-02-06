@@ -36,35 +36,48 @@ export function activate(context: vscode.ExtensionContext) {
 		console.log("Current file:", fileUri.fsPath);
 		console.log("Current file directory:", folderUri.fsPath);
 
-		const pythonPath = "python";
+		//Check if user is running linux
+
+		// const isLinux = navigator.userAgent.includes("Linux");
+		// let pythonPath = "";
+		// if (isLinux){
+		// 	pythonPath = "python3";
+		// }
+		// else{
+		// 	pythonPath = "python";	
+		// }
+
+		let pythonPath = "python";
 		const rawScriptPath = String.raw`doc-generation\dfs_file_traverser.py`;
 		const scriptPath = context.asAbsolutePath(rawScriptPath);
+		
 
-		//const outputChannel = vscode.window.createOutputChannel("My Extension Logs");
+		const outputChannel = vscode.window.createOutputChannel("My Extension Logs");
 		const process = cp.spawn(pythonPath, [scriptPath, '--filepath', folderUri.fsPath, '--apikey', apiKey], { cwd: folderUri.fsPath });
+		
 
 		// process.stdout.on('data', (data) => console.log(`Python Output: ${data}`));
 		// process.stderr.on('data', (data) => console.error(`Python Error: ${data.toString()}`));
 		// process.on('error', (err) => console.error('Failed to start process:', err));
-		// process.stdout.on('data', (data) => {
-		// 	outputChannel.append(data.toString());
-		// });
 
-		// process.stderr.on('data', (data) => {
-		// 	outputChannel.append(`Error: ${data.toString()}`);
-		// });
-
-		// outputChannel.show(true);
 
 		process.stdout.on('data', (data) => {
-			// Converts the buffer to a string and shows it as a toast notification
-			vscode.window.showInformationMessage(`Python Output: ${data.toString()}`);
+			outputChannel.append(data.toString());
 		});
+
+		process.stderr.on('data', (data) => {
+			outputChannel.append(`Error: ${data.toString()}`);
+		});
+
+		outputChannel.show(true);
 
 		process.stderr.on('data', (data) => {
 			// Shows errors in a red error notification
 			vscode.window.showErrorMessage(`Python Error: ${data.toString()}`);
 		});
+
+		vscode.window.showInformationMessage('Documentation generated!');
+		
 	});
 	context.subscriptions.push(disposable);
 

@@ -64,7 +64,16 @@ function activate(context) {
         const folderUri = vscode.Uri.joinPath(fileUri, '..');
         console.log("Current file:", fileUri.fsPath);
         console.log("Current file directory:", folderUri.fsPath);
-        const pythonPath = "python";
+        //Check if user is running linux
+        // const isLinux = navigator.userAgent.includes("Linux");
+        // let pythonPath = "";
+        // if (isLinux){
+        // 	pythonPath = "python3";
+        // }
+        // else{
+        // 	pythonPath = "python";	
+        // }
+        let pythonPath = "python";
         const rawScriptPath = String.raw `doc-generation\dfs_file_traverser.py`;
         const scriptPath = context.asAbsolutePath(rawScriptPath);
         const outputChannel = vscode.window.createOutputChannel("My Extension Logs");
@@ -79,6 +88,14 @@ function activate(context) {
             outputChannel.append(`Error: ${data.toString()}`);
         });
         outputChannel.show(true);
+        process.stdout.on('data', (data) => {
+            // Converts the buffer to a string and shows it as a toast notification
+            vscode.window.showInformationMessage(`Python Output: ${data.toString()}`);
+        });
+        process.stderr.on('data', (data) => {
+            // Shows errors in a red error notification
+            vscode.window.showErrorMessage(`Python Error: ${data.toString()}`);
+        });
     });
     context.subscriptions.push(disposable);
     // ML Gen
