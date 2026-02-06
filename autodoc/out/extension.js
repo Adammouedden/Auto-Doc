@@ -88,14 +88,11 @@ function activate(context) {
             outputChannel.append(`Error: ${data.toString()}`);
         });
         outputChannel.show(true);
-        process.stdout.on('data', (data) => {
-            // Converts the buffer to a string and shows it as a toast notification
-            vscode.window.showInformationMessage(`Python Output: ${data.toString()}`);
-        });
         process.stderr.on('data', (data) => {
             // Shows errors in a red error notification
             vscode.window.showErrorMessage(`Python Error: ${data.toString()}`);
         });
+        vscode.window.showInformationMessage('Documentation generated!');
     });
     context.subscriptions.push(disposable);
     // ML Gen

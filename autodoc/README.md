@@ -2,6 +2,12 @@
 
 Auto Doc helps developers rapidly understand unfamiliar codebases by automatically summarizing files, documenting logic, and generating structural figures on demand. Designed for fast, folder-by-folder exploration of a repository.
 
+## Requirements
+- Python
+- pip install google-genai pydantic
+- Gemini API Key
+
+
 ## Features
 
 - Summarizes code files and directories
