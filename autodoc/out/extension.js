@@ -67,10 +67,18 @@ function activate(context) {
         const pythonPath = "python";
         const rawScriptPath = String.raw `doc-generation\dfs_file_traverser.py`;
         const scriptPath = context.asAbsolutePath(rawScriptPath);
+        const outputChannel = vscode.window.createOutputChannel("My Extension Logs");
         const process = cp.spawn(pythonPath, [scriptPath, '--filepath', folderUri.fsPath, '--apikey', apiKey], { cwd: folderUri.fsPath });
-        process.stdout.on('data', (data) => console.log(`Python Output: ${data}`));
-        process.stderr.on('data', (data) => console.error(`Python Error: ${data.toString()}`));
-        process.on('error', (err) => console.error('Failed to start process:', err));
+        // process.stdout.on('data', (data) => console.log(`Python Output: ${data}`));
+        // process.stderr.on('data', (data) => console.error(`Python Error: ${data.toString()}`));
+        // process.on('error', (err) => console.error('Failed to start process:', err));
+        process.stdout.on('data', (data) => {
+            outputChannel.append(data.toString());
+        });
+        process.stderr.on('data', (data) => {
+            outputChannel.append(`Error: ${data.toString()}`);
+        });
+        outputChannel.show(true);
     });
     context.subscriptions.push(disposable);
     // ML Gen
